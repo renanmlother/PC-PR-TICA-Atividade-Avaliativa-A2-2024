@@ -13,9 +13,6 @@ def cadastrar():
 
     mat = int(input("Digite a matrícula do funcionário: "))
     
-        
-    
-
     nome = input("Digite o nome do funcionário: ")
     cod = int(input("Digite o código da função (101/102): "))
     if cod==101:
@@ -32,11 +29,17 @@ def cadastrar():
         falta = int(input("Digite o número de faltas do funcionário: "))
     
     #CONFIRMAÇÃO
-    check= input(f"Confirmar cadastro (S/N)?: ")
+    check= str(input(f"Confirmar cadastro (S/N)?: "))
+    if check.lower()=='s':
+        vetfunc.append
 
-    if check=='S':
-        funcionario = {"matricula": mat, "nome": nome, "codigo": cod, "faltas": falta, "salario": sal}
-        funcionarios.append(funcionario)
+        
+
+
+
+    
+
+        
     else:
         print("Cadastro cancelado")
 
@@ -93,16 +96,7 @@ def relatorio():
         else:
             ir = bruto * 0.275
         
-        if bruto <= 1751.81:
-            inss = bruto * 0.08
-        elif bruto <= 2919.72:
-            inss = bruto * 0.09
-        elif bruto <= 5839.45:
-            inss = bruto * 0.11
-        else:
-            inss = 642.34
         
-        liquido = bruto - ir - inss
 
         print(funcionario["matricula"], funcionario["nome"], funcionario["codigo"], "Salário bruto: ", bruto, "Salário líquido: ", liquido, '\n')
 
