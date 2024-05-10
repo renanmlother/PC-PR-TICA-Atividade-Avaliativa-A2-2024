@@ -18,11 +18,14 @@ def cadastrar():
         vol = int(input("Digite o volume de vendas mensal do funcionário: "))
         sal = 1500 + vol*0.09
     elif cod == 102:
-        sal=int(input("Digite o salário bruto do funcionário"))
+        sal=int(input("Digite o salário bruto do funcionário: "))
     else:
         print("Digite um código válido")
         return
     falta = int(input("Digite o número de faltas do funcionário: "))
+    while falta>30:
+        print("Digite um número valido de faltas!")
+        falta = int(input("Digite o número de faltas do funcionário: "))
 
     #CONFIRMAÇÃO
     check= input(f"Confirmar cadastro (S/N)?: ")
@@ -30,21 +33,30 @@ def cadastrar():
     if check=='S':
         funcionario = {"matricula": mat, "nome": nome, "codigo": cod, "faltas": falta, "salario": sal}
         funcionarios.append(funcionario)
+        print("Cadastro realizado com sucesso!\n")
     else:
-        print("Cadastro cancelado")
+        print("Cadastro cancelado\n")
 
 def excluir():
+    if not funcionarios:
+        print("Não há funcionários cadastrados.\n")
+        return
+    
     matricula = int(input("Digite a matrícula do funcionário que deseja excluir: "))
 
     for funcionario in funcionarios:
         if funcionario["matricula"] == matricula:
             funcionarios.remove(funcionario)
-            print("Funcionário excluído com sucesso.")
+            print("Funcionário excluído com sucesso.\n")
             return
 
-    print("Funcionário não encontrado.")
+    print("Funcionário não encontrado.\n")
 
 def folha():
+    if not funcionarios:
+        print("Não há funcionários cadastrados.\n")
+        return
+    
     matricula = int(input("Digite a matrícula do funcionário de que deseja determinar a folha de pagamento: "))
 
     for funcionario in funcionarios:
@@ -68,11 +80,17 @@ def folha():
             print(f"Número de faltas: {funcionario['faltas']}")
             print(f"Salário bruto: R$ {funcionario['salario']:.2f}")
             print(f"Percentual do imposto de renda: {percentual_ir}")
+            print("\n")
             return
 
-    print("Funcionário não encontrado.")
+    print("Funcionário não encontrado.\n")
 
 def relatorio():
+    if not funcionarios:
+        print("Não há funcionários cadastrados.", "\n")
+        return
+    
+    print("{:<10} {:<20} {:<10} {:<15} {:<15}".format("Matrícula", "Nome", "Código", "Salário Bruto", "Salário Líquido"))
     for funcionario in funcionarios:
         bruto = funcionario["salario"]
         if bruto <= 2259.20:
@@ -85,23 +103,47 @@ def relatorio():
             ir = bruto * 0.225
         else:
             ir = bruto * 0.275
+        liquido = bruto - ir 
         
-        if bruto <= 1751.81:
-            inss = bruto * 0.08
-        elif bruto <= 2919.72:
-            inss = bruto * 0.09
-        elif bruto <= 5839.45:
-            inss = bruto * 0.11
-        else:
-            inss = 642.34
-        
-        liquido = bruto - ir - inss
+        print("{:<10} {:<20} {:<10} R$ {:<13.2f} R$ {:<13.2f}".format(funcionario["matricula"], funcionario["nome"], funcionario["codigo"], bruto, liquido))
 
-        print(funcionario["matricula"], funcionario["nome"], funcionario["codigo"], "Salário bruto: ", bruto, "Salário líquido: ", liquido, '\n')
+def printfalta():
+    if not funcionarios:
+        print("Não há funcionários cadastrados.\n")
+        return
 
-#def printmaior():
+    maior_falta = funcionarios[0]
 
-#def printfalta():
+    for funcionario in funcionarios:
+        if funcionario["faltas"] > maior_falta["faltas"]:
+            maior_falta = funcionario
+
+    print("Funcionário com mais faltas:")
+    print(f"Matrícula: {maior_falta['matricula']}")
+    print(f"Nome: {maior_falta['nome']}")
+    print(f"Código da função: {maior_falta['codigo']}")
+    print(f"Número de faltas: {maior_falta['faltas']}")
+    print(f"Salário bruto: R$ {maior_falta['salario']:.2f}")
+    print("\n")
+
+def printmaior():
+    if not funcionarios:
+        print("Não há funcionários cadastrados.\n")
+        return
+
+    maior_salario = funcionarios[0]
+
+    for funcionario in funcionarios:
+        if funcionario["salario"] > maior_salario["salario"]:
+            maior_salario = funcionario
+
+    print("Funcionário com maior salário:")
+    print(f"Matrícula: {maior_salario['matricula']}")
+    print(f"Nome: {maior_salario['nome']}")
+    print(f"Código da função: {maior_salario['codigo']}")
+    print(f"Número de faltas: {maior_salario['faltas']}")
+    print(f"Salário bruto: R$ {maior_salario['salario']:.2f}")
+    print("\n")
 
 funcionarios = []
 
@@ -117,10 +159,10 @@ while True:
         folha()
     elif opcao == '4':
         relatorio()
-    #elif opcao == '5':
-    #    printmaior()
-    #elif opcao == '6':
-    #    printfalta()
+    elif opcao == '5':
+        printmaior()
+    elif opcao == '6':
+        printfalta()
     elif opcao == '0':
         print("Encerrando o programa...")
         break
