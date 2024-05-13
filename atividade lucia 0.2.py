@@ -25,21 +25,19 @@ def cadastrar():
     nome = input("Digite o nome do funcionário: ")
 
     cod = int(input("Digite o código da função (101/102): "))
+    while cod!=101 and cod!=102:
+        print("Digite um código válido")
+        cod = int(input("Digite o código da função (101/102): "))
     if cod==101:
         salfixo = 1500
         vol = int(input("Digite o volume de vendas mensal do funcionário: "))
         salbruto = 1500 + vol*0.09
 
-    elif cod == 102:
+    else:
         salbruto=int(input("Digite o salário bruto do funcionário: "))
         salfixo = salbruto
-
-    while cod!=101 and cod!=102:
-        print("Digite um código válido")
-        cod = int(input("Digite o código da função (101/102): "))
     falta = int(input("Digite o número de faltas do funcionário: "))
-
-    while falta>30 and falta<0:
+    while falta>31 and falta<0:
         print("Digite um número valido de faltas!")
         falta = int(input("Digite o número de faltas do funcionário: "))
 
@@ -75,6 +73,10 @@ def cadastrar():
     #CONFIRMAÇÃO
    
     check= str(input(f"Confirmar cadastro (S/N)?: "))
+    check =check.replace(" ","")
+    while check.lower()!='s' and check.lower()!='n':
+        print("Digite sim ou não! (S ou N)")
+        check= str(input(f"Confirmar cadastro (S/N)?: "))
     if check.lower()=='s':
         funcionarios.append(nome)
         funcionarios.append(cod)
@@ -89,10 +91,6 @@ def cadastrar():
         
     else:
         print("Cadastro cancelado")
-        
-    while check.lower()!='s' and check.lower()!='n':
-        print("Digite sim ou não! (S ou N)")
-        check= str(input(f"Confirmar cadastro (S/N)?: "))
     print(mat, end = '')
     print(funcionario[mat])
 
