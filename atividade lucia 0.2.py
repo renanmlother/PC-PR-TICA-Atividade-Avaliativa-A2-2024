@@ -1,52 +1,23 @@
-def menu ():
-    print (f"\nAções disponíveis:")
-    print (f"\n1 - Cadastrar novo funcionário")
-    print (f"2 - Excluir funcionário existente")
-    print (f"3 - Determinar folha de pagamento de funcionário específico")
-    print (f"4 - Determinar relatório de salário bruto e líquido de todos os funcionários")
-    print (f"5 - Imprimir dados do funcionário com maior salário")
-    print (f"6 - Imprimir dados do funcionário com mais faltas no mês")
-    print (f"0 - Encerrar programa")
+def verificacod(cod):
+    global salfixo,vol,salbruto
 
-def cadastrar():
-    global funcionarios
-    salliquido = 0
-    aux = []
-    salbruto = 0
-    global salfixo  
-
-    print(f"Digite as informações do funcionário que deseja cadastrar:\n")
-
-    mat = int(input("Digite a matrícula do funcionário: "))
-    while mat in funcionario.keys():
-        print("O código de matrícula já está inserido!")
-        mat = int(input("Digite a matrícula do funcionário: "))
-    
-    nome = input("Digite o nome do funcionário: ")
-
-    cod = int(input("Digite o código da função (101/102): "))
     while cod!=101 and cod!=102:
         print("Digite um código válido")
         cod = int(input("Digite o código da função (101/102): "))
+
     if cod==101:
         salfixo = 1500
-        vol = int(input("Digite o volume de vendas mensal do funcionário: "))
+        vol = float(input("Digite o volume de vendas mensal do funcionário: "))
         salbruto = 1500 + vol*0.09
 
     else:
         salbruto=int(input("Digite o salário bruto do funcionário: "))
         salfixo = salbruto
-    falta = int(input("Digite o número de faltas do funcionário: "))
-    while falta>31 and falta<0:
-        print("Digite um número valido de faltas!")
-        falta = int(input("Digite o número de faltas do funcionário: "))
 
-    if falta==0:
-        salbruto = salbruto
+    return salbruto,salfixo
 
-    else:
-        salbruto = salbruto-(falta*salfixo/30)    
 
+def percentual(salbruto):
     if salbruto <= 2259.20:
         percentual_ir = 'Isento'
 
@@ -66,17 +37,63 @@ def cadastrar():
         print("Funcionário isento de imposto!")
         salliquido=salbruto
     
-        
     else:
         salliquido = salbruto - salbruto*percentual_ir/100
-        
+
+    return salliquido,percentual_ir
+
+def menu ():
+    print (f"\nAções disponíveis:")
+    print (f"\n1 - Cadastrar novo funcionário")
+    print (f"2 - Excluir funcionário existente")
+    print (f"3 - Determinar folha de pagamento de funcionário específico")
+    print (f"4 - Determinar relatório de salário bruto e líquido de todos os funcionários")
+    print (f"5 - Imprimir dados do funcionário com maior salário")
+    print (f"6 - Imprimir dados do funcionário com mais faltas no mês")
+    print (f"0 - Encerrar programa")
+
+def cadastrar():
+    global funcionarios
+    salliquido = 0
+    aux = []
+    salbruto = 0
+    global salfixo  
+   
+    print(f"Digite as informações do funcionário que deseja cadastrar:\n")
+
+    mat = int(input("Digite a matrícula do funcionário: "))
+    
+    while mat in funcionario.keys():
+        print("O código de matrícula já está inserido!")
+        mat = int(input("Digite a matrícula do funcionário: "))
+    
+    nome = input("Digite o nome do funcionário: ")
+
+    cod = int(input("Digite o código da função (101/102): "))
+    salbruto, salliquido = verificacod(cod)
+
+    falta = int(input("Digite o número de faltas do funcionário: "))
+    while falta>31 and falta<0:
+        print("Digite um número valido de faltas!")
+        falta = int(input("Digite o número de faltas do funcionário: "))
+
+    if falta==0:
+        salbruto = salbruto
+
+    else:
+        salbruto = salbruto-(falta*salfixo/30)    
+
+    salliquido,percentual_ir = percentual(salbruto)
+    
     #CONFIRMAÇÃO
    
     check= str(input(f"Confirmar cadastro (S/N)?: "))
+
     check =check.replace(" ","")
     while check.lower()!='s' and check.lower()!='n':
         print("Digite sim ou não! (S ou N)")
         check= str(input(f"Confirmar cadastro (S/N)?: "))
+
     if check.lower()=='s':
         funcionarios.append(nome)
         funcionarios.append(cod)
@@ -84,13 +101,16 @@ def cadastrar():
         funcionarios.append(salbruto)
         funcionarios.append(percentual_ir)
         funcionarios.append(salliquido)
+
         aux = funcionarios.copy()
         funcionario[mat]=aux
         funcionarios.clear()
+
         print("Cadastro efetuado com sucesso!")
         
     else:
         print("Cadastro cancelado")
+        
     print(mat, end = '')
     print(funcionario[mat])
 
@@ -124,10 +144,6 @@ def relatorio():
         print(i[0:3])
         print(f"Sálario bruto: {i[3]},sálario líquido: {i[5]}")
         
-        
-
-        
-
 def printmaior():
     maior = 0
     global salfixo
